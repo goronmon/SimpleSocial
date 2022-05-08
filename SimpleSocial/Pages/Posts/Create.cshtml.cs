@@ -22,7 +22,7 @@ namespace SimpleSocial.Pages.Posts
 
         public IActionResult OnGet()
         {
-        ViewData["UserId"] = new SelectList(_context.Set<User>(), "Id", "Id");
+            ViewData["UserId"] = new SelectList(_context.Set<User>(), "Id", "Id");
             return Page();
         }
 
@@ -32,10 +32,15 @@ namespace SimpleSocial.Pages.Posts
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            // var currentUser = _context.Set<User>();
+            // Post.User = currentUser.FirstOrDefault();
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            Post.CreateDate = DateTime.Now;
+            Post.LastModifiedDate = DateTime.Now;
 
             _context.Post.Add(Post);
             await _context.SaveChangesAsync();

@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SimpleSocial.Data;
 
 namespace SimpleSocial.Models
 {
-    public class Post
+    public class Post : IDateCreateAndModified
     {
         public int PostId { get; set; }
         [Required]
@@ -12,18 +13,15 @@ namespace SimpleSocial.Models
         public string Text { get; set;}
         public bool IsDeleted { get; set; } = false;
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreateDate { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime LastModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
 
-        [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; } = null;
 
-        public List<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; } = null;
     }
 
     public class PostDelta
@@ -32,19 +30,16 @@ namespace SimpleSocial.Models
         [Required]
         public int Sequence { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime UpdateDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public string OldTitle { get; set; }
         public string NewTitle { get; set; }
         public string OldText { get; set; }
         public string NewText { get; set; }
 
-        [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }
         public User User { get; set; }
 
-        [Required]
         [ForeignKey("Post")]
         public int PostId { get; set; }
         public Post Post { get; set; }
@@ -56,15 +51,12 @@ namespace SimpleSocial.Models
         [Required]
         public string Reason { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime ReportDate { get; set; }
 
-        [Required]
         [ForeignKey("User")]
         public string UserId { get; set; }
         public User User { get; set; }
 
-        [Required]
         [ForeignKey("Post")]
         public int PostId { get; set; }
         public Post Post { get; set; }
